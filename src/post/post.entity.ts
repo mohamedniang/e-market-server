@@ -5,11 +5,13 @@ import {
   ManyToOne,
   BaseEntity,
   OneToMany,
+  CreateDateColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { Allow } from 'class-validator';
 
 @Entity()
-export class PostEntity extends BaseEntity {
+export class Post extends BaseEntity {
   @Allow()
   @PrimaryGeneratedColumn()
   id: number;
@@ -25,4 +27,10 @@ export class PostEntity extends BaseEntity {
   @Allow()
   @Column({ length: 256, default: '' })
   link: string;
+
+  @CreateDateColumn()
+  created_at: Date;
+
+  @UpdateDateColumn()
+  updated_at: Date;
 }

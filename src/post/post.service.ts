@@ -1,5 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { PostEntity } from './post.entity';
+import { Post } from './post.entity';
 
 @Injectable()
 export class PostService {
@@ -8,15 +8,15 @@ export class PostService {
   }
 
   async getAllPost() {
-    return PostEntity.createQueryBuilder('post').getMany();
+    return Post.createQueryBuilder('post').getMany();
   }
 
-  addPost(post: PostEntity) {
+  addPost(post: Post) {
     return post.save();
   }
 
   deletePost(id: number) {
-    return PostEntity.createQueryBuilder('post_entity')
+    return Post.createQueryBuilder('post_entity')
       .delete()
       .where('id = :id', { id })
       .execute();
