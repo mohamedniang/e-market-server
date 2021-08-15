@@ -9,6 +9,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { Allow } from 'class-validator';
+import { User } from 'src/user/user.entity';
 
 @Entity()
 export class Post extends BaseEntity {
@@ -27,6 +28,9 @@ export class Post extends BaseEntity {
   @Allow()
   @Column({ length: 256, default: '' })
   link: string;
+
+  @ManyToOne(() => User, (user) => user.posts)
+  owner: User;
 
   @CreateDateColumn()
   created_at: Date;

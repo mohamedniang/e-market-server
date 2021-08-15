@@ -1,10 +1,14 @@
+import { Post as httpPost } from '@nestjs/common';
+import { Post } from 'src/post/post.entity';
 import {
   BaseEntity,
   BeforeInsert,
   Column,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const bcrypt = require('bcrypt');
 
 @Entity('user')
@@ -30,7 +34,11 @@ export class User extends BaseEntity {
   })
   email: string;
 
-  @BeforeInsert() async hashPassword() {
+  @OneToMany(() => Post, (post) => post.owner)
+  posts: Post[];
+
+  @BeforeInsert()
+  async hashPassword() {
     this.password = await bcrypt.hash(this.password, 10);
   }
 }

@@ -24,9 +24,11 @@ export class UserService {
   }
 
   findByEmail(email: string) {
+    console.log(`finding by email ${email}`);
     return User.findOneOrFail({ where: { email } });
   }
   findByPayload({ username }: any) {
+    console.log(`finding by payload ${username}`);
     return User.findOneOrFail({ where: { username } });
   }
 
