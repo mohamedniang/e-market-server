@@ -5,7 +5,6 @@ import { UserModule } from '../user/user.module';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { JwtStrategy } from './jwt.strategy';
-const { SECRETKEY, EXPIRESIN } = process.env;
 @Module({
   imports: [
     UserModule,
@@ -15,9 +14,9 @@ const { SECRETKEY, EXPIRESIN } = process.env;
       session: false,
     }),
     JwtModule.register({
-      secret: 'secret',
+      secret: process.env.SECRETKEY || 'secret',
       signOptions: {
-        expiresIn: '2h',
+        expiresIn: process.env.EXPIRESIN || '2h',
       },
     }),
   ],

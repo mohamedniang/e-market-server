@@ -19,17 +19,24 @@ export class UserService {
     return `This action returns all user`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findOne(id: string) {
+    console.log(`finding by #${id} user`);
+    return await User.findOne(id);
   }
 
   findByEmail(email: string) {
     console.log(`finding by email ${email}`);
-    return User.findOneOrFail({ where: { email } });
+    return User.findOneOrFail({
+      where: { email },
+      select: ['id', 'username', 'email', 'password'],
+    });
   }
   findByPayload({ username }: any) {
     console.log(`finding by payload ${username}`);
-    return User.findOneOrFail({ where: { username } });
+    return User.findOneOrFail({
+      where: { username },
+      select: ['id', 'username', 'email', 'password'],
+    });
   }
 
   update(id: number, user: User) {

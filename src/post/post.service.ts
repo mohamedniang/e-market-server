@@ -8,7 +8,17 @@ export class PostService {
   }
 
   async getAllPost() {
-    return Post.createQueryBuilder('post').getMany();
+    return Post.createQueryBuilder('post')
+      .leftJoinAndSelect('post.owner', 'owner')
+      .getMany();
+  }
+
+  async getAllUserPost(id: string) {
+    return Post.find({ where: { owner: { id } }, relations: ['owner'] });
+  }
+
+  async getOnePost(id: string) {
+    return Post.findOne({ where: { id }, relations: ['owner'] });
   }
 
   addPost(post: Post) {

@@ -27,7 +27,7 @@ export class AuthController {
   // @Roles('User')
   async get(@Req() req) {
     console.log(`req.body`, req.user);
-    return await this.userService.findByPayload(req.user);
+    return await this.userService.findOne(req.user?.id);
   }
 
   @Post('register')

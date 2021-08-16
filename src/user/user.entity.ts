@@ -4,9 +4,11 @@ import {
   BaseEntity,
   BeforeInsert,
   Column,
+  CreateDateColumn,
   Entity,
   OneToMany,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const bcrypt = require('bcrypt');
@@ -25,6 +27,7 @@ export class User extends BaseEntity {
   @Column({
     type: 'varchar',
     nullable: false,
+    select: false,
   })
   password: string;
 
@@ -41,4 +44,10 @@ export class User extends BaseEntity {
   async hashPassword() {
     this.password = await bcrypt.hash(this.password, 10);
   }
+
+  @CreateDateColumn()
+  created_at: Date;
+
+  @UpdateDateColumn()
+  updated_at: Date;
 }

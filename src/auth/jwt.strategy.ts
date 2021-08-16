@@ -18,7 +18,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       },
       secretOrKey: process.env.SECRETKEY,
     });
-    Logger.log('init', 'JWT Strategy');
+    Logger.log('init' + process.env.SECRETKEY, 'JWT Strategy');
   }
 
   async validate(payload: JwtPayload): Promise<User> {

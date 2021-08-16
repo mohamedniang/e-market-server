@@ -25,11 +25,24 @@ export class PostController {
     return await this.postService.getAllPost();
   }
 
+  @Get(':id')
+  // @UseGuards(AuthGuard())
+  async getOnePost(@Param('id') id: string) {
+    return await this.postService.getOnePost(id);
+  }
+
+  @Get('user/:id')
+  // @UseGuards(AuthGuard())
+  async getUserPost(@Param('id') id: string): Promise<Post[]> {
+    return await this.postService.getAllUserPost(id);
+  }
+
   @httpPost()
   @UseGuards(AuthGuard())
-  async addPost(@Body() user: Post) {
-    console.log('body', user);
-    return await this.postService.addPost(user);
+  async addPost(@Body() post: any) {
+    console.log('body', post);
+    post = Object.assign(new Post(), post);
+    return await this.postService.addPost(post);
   }
 
   @Delete(':id')

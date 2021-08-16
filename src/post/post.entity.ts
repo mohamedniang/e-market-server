@@ -22,7 +22,7 @@ export class Post extends BaseEntity {
   title: string;
 
   @Allow()
-  @Column({ length: 100, default: '' })
+  @Column({ length: 32768, default: '' })
   description: string;
 
   @Allow()
