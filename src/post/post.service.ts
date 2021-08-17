@@ -18,7 +18,7 @@ export class PostService {
   }
 
   async getOnePost(id: string) {
-    return Post.findOne({ where: { id }, relations: ['owner'] });
+    return Post.findOne({ where: { id }, relations: ['owner', 'thumbnail'] });
   }
 
   addPost(post: Post) {
@@ -26,7 +26,7 @@ export class PostService {
   }
 
   deletePost(id: number) {
-    return Post.createQueryBuilder('post_entity')
+    return Post.createQueryBuilder('post')
       .delete()
       .where('id = :id', { id })
       .execute();

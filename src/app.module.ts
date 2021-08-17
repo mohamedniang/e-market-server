@@ -1,4 +1,9 @@
-import { Module } from '@nestjs/common';
+import {
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+  RequestMethod,
+} from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 
 import { AppController } from './app.controller';
@@ -10,6 +15,11 @@ import { PostModule } from './post/post.module';
 import { PostService } from './post/post.service';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
+import { SpaceModule } from './space/space.module';
+import { StoredElementService } from './stored-element/stored-element.service';
+import { StoredElementModule } from './stored-element/stored-element.module';
+import { MulterModule } from '@nestjs/platform-express';
+import { SpaceMiddleware } from './space/space.middleware';
 let config = {};
 if (process.env.NODE_ENV == 'production') {
   config = {
@@ -44,11 +54,22 @@ if (process.env.NODE_ENV == 'production') {
     ConfigModule.forRoot({
       isGlobal: true,
     }),
+    MulterModule.register({
+      dest: './files',
+    }),
     PostModule,
     UserModule,
     AuthModule,
+    SpaceModule,
+    StoredElementModule,
   ],
   controllers: [AppController, PostController],
-  providers: [AppService, PostService],
+  providers: [AppService, PostService, StoredElementService],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(SpaceMiddleware)
+      .forRoutes({ path: 'space/upload', method: RequestMethod.POST });
+  }
+}

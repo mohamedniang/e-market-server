@@ -8,36 +8,30 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   OneToOne,
-  JoinColumn,
 } from 'typeorm';
 import { Allow } from 'class-validator';
-import { User } from 'src/user/user.entity';
-import { StoredElement } from 'src/stored-element/stored-element.entity';
+import { Post } from '../post/post.entity';
 
 @Entity()
-export class Post extends BaseEntity {
+export class StoredElement extends BaseEntity {
   @Allow()
   @PrimaryGeneratedColumn()
   id: number;
 
   @Allow()
   @Column({ length: 684, nullable: false })
-  title: string;
+  name: string;
 
   @Allow()
-  @Column({ type: 'text' })
-  description: string;
+  @Column({ length: 684 })
+  type: string;
 
   @Allow()
-  @Column({ length: 256, nullable: true })
-  link: string;
+  @Column({ length: 3096 })
+  location: string;
 
-  @ManyToOne(() => User, (user) => user.posts)
-  owner: User;
-
-  @OneToOne(() => StoredElement)
-  @JoinColumn()
-  thumbnail: StoredElement;
+  // @OneToOne(() => Post, (post) => post.thumbnail)
+  // post: Post;
 
   @CreateDateColumn()
   created_at: Date;
