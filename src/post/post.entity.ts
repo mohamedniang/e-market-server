@@ -4,15 +4,14 @@ import {
   PrimaryGeneratedColumn,
   ManyToOne,
   BaseEntity,
-  OneToMany,
   CreateDateColumn,
   UpdateDateColumn,
   OneToOne,
   JoinColumn,
 } from 'typeorm';
 import { Allow } from 'class-validator';
-import { User } from 'src/user/user.entity';
-import { StoredElement } from 'src/stored-element/stored-element.entity';
+import { User } from '../user/user.entity';
+import { StoredElement } from '../stored-element/stored-element.entity';
 
 @Entity()
 export class Post extends BaseEntity {

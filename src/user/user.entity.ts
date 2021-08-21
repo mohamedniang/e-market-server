@@ -1,8 +1,9 @@
-import { Post as httpPost } from '@nestjs/common';
+import { Link } from 'src/link/link.entity';
 import { Post } from 'src/post/post.entity';
 import {
   BaseEntity,
   BeforeInsert,
+  BeforeUpdate,
   Column,
   CreateDateColumn,
   Entity,
@@ -40,14 +41,53 @@ export class User extends BaseEntity {
   @OneToMany(() => Post, (post) => post.owner)
   posts: Post[];
 
+  @OneToMany(() => Link, (link) => link.account)
+  links: Link[];
+
+  @Column({ default: false, select: false })
+  isVerified: boolean;
+
+  @Column()
+  fullname: string;
+
+  @Column()
+  company: string;
+
+  @Column()
+  address: string;
+
+  @Column()
+  country: string;
+
+  @Column()
+  city: string;
+
+  @Column()
+  state: string;
+
+  @Column()
+  phone: string;
+
+  @Column()
+  fax: string;
+
+  @Column()
+  website: string;
+
   @BeforeInsert()
   async hashPassword() {
     this.password = await bcrypt.hash(this.password, 10);
   }
 
-  @CreateDateColumn()
+  // @BeforeInsert()
+  // @BeforeUpdate()
+  // async formatUsername() {
+  //   this.username = this.username.trim().split(' ').join('_');
+  // }
+
+  @CreateDateColumn({ select: false })
   created_at: Date;
 
-  @UpdateDateColumn()
+  @UpdateDateColumn({ select: false })
   updated_at: Date;
 }

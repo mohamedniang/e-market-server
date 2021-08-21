@@ -21,16 +21,41 @@ export class UserService {
 
   async findOne(id: string) {
     console.log(`finding by #${id} user`);
-    return await User.findOne(id);
+    return await User.findOne({ where: { id } });
   }
-
-  findByEmail(email: string) {
-    console.log(`finding by email ${email}`);
-    return User.findOneOrFail({
-      where: { email },
-      select: ['id', 'username', 'email', 'password'],
+  async findOneMore(id: string) {
+    return await User.findOne({
+      where: { id },
+      select: [
+        'username',
+        'email',
+        'fullname',
+        'company',
+        'address',
+        'country',
+        'city',
+        'state',
+        'phone',
+        'fax',
+        'website',
+        'created_at',
+      ],
     });
   }
+
+  async findByEmail(email: string) {
+    console.log(`finding by email ${email}`);
+    try {
+      const res = await User.findOneOrFail({
+        where: { email },
+        select: ['id', 'username', 'email', 'password', 'isVerified'],
+      });
+      return res;
+    } catch (e) {
+      throw new HttpException('Email not registered', HttpStatus.UNAUTHORIZED);
+    }
+  }
+
   findByPayload({ username }: any) {
     console.log(`finding by payload ${username}`);
     return User.findOneOrFail({
@@ -39,8 +64,11 @@ export class UserService {
     });
   }
 
-  update(id: number, user: User) {
-    return `This action updates a #${id} user`;
+  async update(id: string, user: any) {
+    console.log(`This action updates a #${id} user`);
+    const newUser = new User();
+    newUser.id = id;
+    return await Object.assign(newUser, user).save();
   }
 
   remove(id: number) {

@@ -15,14 +15,14 @@ export class SpaceMiddleware implements NestMiddleware {
     const spacesEndpoint = new aws.Endpoint('fra1.digitaloceanspaces.com');
     const s3 = new aws.S3({
       endpoint: spacesEndpoint,
-      accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-      secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+      accessKeyId: process.env.DO_ACCESS_KEY_ID,
+      secretAccessKey: process.env.DO_SECRET_ACCESS_KEY,
     });
     // Change bucket property to your Space name
     this.upload = multer({
       storage: multerS3({
         s3: s3,
-        bucket: process.env.AWS_BUCKET,
+        bucket: process.env.DO_BUCKET,
         acl: 'public-read',
         key: function (request, file, cb) {
           console.log('inside multer function', file);

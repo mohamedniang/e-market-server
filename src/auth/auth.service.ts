@@ -26,10 +26,16 @@ export class AuthService {
 
   async register(user: User) {
     try {
+      const existingUser = await User.findOne({ where: { email: user.email } });
+      if (existingUser)
+        throw new HttpException(
+          'Registration failed: Email already registered',
+          HttpStatus.CONFLICT,
+        );
       const res = await this.userService.create(user);
       return res;
     } catch (err) {
-      return 'error while creating user';
+      return { error: 1, message: err.message ?? 'error while creating user' };
     }
     return 'none';
   }
@@ -43,7 +49,16 @@ export class AuthService {
         userInDB.password,
       );
       if (!isPasswordCorrect) {
-        throw new HttpException('Login failed', HttpStatus.UNAUTHORIZED);
+        throw new HttpException(
+          'Login failed: Incorrect password',
+          HttpStatus.UNAUTHORIZED,
+        );
+      }
+      if (!userInDB.isVerified) {
+        throw new HttpException(
+          'Login failed: Not verified user',
+          HttpStatus.UNAUTHORIZED,
+        );
       }
       // generate and sign token
       const token = this._createToken(userInDB);
@@ -54,7 +69,7 @@ export class AuthService {
     } catch (e) {
       return {
         error: 1,
-        message: 'there was an error while login in',
+        message: e,
       };
     }
   }

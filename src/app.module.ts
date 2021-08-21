@@ -20,6 +20,11 @@ import { StoredElementService } from './stored-element/stored-element.service';
 import { StoredElementModule } from './stored-element/stored-element.module';
 import { MulterModule } from '@nestjs/platform-express';
 import { SpaceMiddleware } from './space/space.middleware';
+import { LinkModule } from './link/link.module';
+import { VerificationLinkModule } from './verification-link/verification-link.module';
+import { RecoveryLinkModule } from './recovery-link/recovery-link.module';
+import { EmailModule } from './email/email.module';
+import { VideoCallModule } from './video-call/video-call.module';
 let config = {};
 if (process.env.NODE_ENV == 'production') {
   config = {
@@ -62,6 +67,11 @@ if (process.env.NODE_ENV == 'production') {
     AuthModule,
     SpaceModule,
     StoredElementModule,
+    LinkModule,
+    VerificationLinkModule,
+    RecoveryLinkModule,
+    EmailModule,
+    VideoCallModule,
   ],
   controllers: [AppController, PostController],
   providers: [AppService, PostService, StoredElementService],

@@ -10,7 +10,7 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { StoredElement } from 'src/stored-element/stored-element.entity';
+import { StoredElement } from '../stored-element/stored-element.entity';
 import { SpaceService } from './space.service';
 
 @Controller('space')
