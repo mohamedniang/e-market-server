@@ -17,12 +17,12 @@ export class EmailService {
       region: process.env.AWS_REGION,
     });
     this.transporter = nodemailer.createTransport({
-      SES: { ses, aws },
-      // service: 'gmail',
-      // auth: {
-      //   user: 'mouhamedniang1997@gmail.com',
-      //   pass: 'neguasapurqlaxej',
-      // },
+      // SES: { ses, aws },
+      service: 'gmail',
+      auth: {
+        user: 'mouhamedniang1997@gmail.com',
+        pass: 'neguasapurqlaxej',
+      },
     });
   }
 

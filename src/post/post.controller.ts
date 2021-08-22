@@ -9,6 +9,7 @@ import {
   Param,
   ParseIntPipe,
   UseGuards,
+  Patch,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Post } from './post.entity';
@@ -30,9 +31,20 @@ export class PostController {
   async getOnePost(@Param('id') id: string) {
     return await this.postService.getOnePost(id);
   }
+  @Get('edit/:id')
+  @UseGuards(AuthGuard())
+  async getOnePostForEdit(@Param('id') id: string, @Req() req) {
+    console.log(`user`, req.user);
+    const res = await this.postService.getOnePost(id);
+    if (res.owner.id != req.user.id)
+      return {
+        error: 1,
+        message: "You can't edit a post that you do not own",
+      };
+    return res;
+  }
 
   @Get('user/:id')
-  // @UseGuards(AuthGuard())
   async getUserPost(@Param('id') id: string): Promise<Post[]> {
     return await this.postService.getAllUserPost(id);
   }
@@ -43,6 +55,13 @@ export class PostController {
     console.log('body', post);
     post = Object.assign(new Post(), post);
     return await this.postService.addPost(post);
+  }
+
+  @Patch(':id')
+  @UseGuards(AuthGuard())
+  update(@Param('id', new ParseIntPipe()) id: number, @Body() post: any) {
+    console.log('updating post', id, post);
+    return this.postService.update(+id, post);
   }
 
   @Delete(':id')

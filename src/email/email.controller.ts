@@ -43,6 +43,7 @@ export class EmailController {
     console.log('sendVerification', id, now);
     const link = await VerificationLink.findOneOrFail({
       where: { account: { id } },
+      relations: ['account'],
     });
     link.key = v4();
     if (link.resend_date.getTime() > now.getTime()) {
@@ -54,7 +55,7 @@ export class EmailController {
     }
     const result = await this.emailService.send({
       from: this.test_email, // sender address
-      to: this.test_email, // list of receivers
+      to: link.account.email, // list of receivers
       subject: 'You have successfully registered to iphone flipping !', // Subject line
       text: 'click this verification link: verify my account', // plain text body
       html: `<p>click this verification link: <a href="local.iphoneflipping.com/account/verification/${link.key}">verify my account</a></p>`, // html body
@@ -122,7 +123,7 @@ export class EmailController {
 
       const result = await this.emailService.send({
         from: this.test_email, // sender address
-        to: this.test_email, // list of receivers
+        to: email, // list of receivers
         subject: 'You have successfully registered to iphone flipping !', // Subject line
         text: 'click this verification link: verify my account', // plain text body
         html: `<p>click this verification link: <a href="local.iphoneflipping.com/account/verification/${link.key}">verify my account</a></p>`, // html body
@@ -172,7 +173,7 @@ export class EmailController {
       link.save();
       const result = await this.emailService.send({
         from: this.test_email, // sender address
-        to: this.test_email, // list of receivers
+        to: email, // list of receivers
         subject: 'You requesting a password recovery to iphone flipping !', // Subject line
         text: 'click this link: change my password', // plain text body
         html: `<p>click this link: <a href="local.iphoneflipping.com/account/password/change/${link.key}">change my password</a></p>`, // html body

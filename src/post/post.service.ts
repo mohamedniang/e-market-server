@@ -25,6 +25,13 @@ export class PostService {
     return post.save();
   }
 
+  async update(id: number, post: any) {
+    console.log(`This action updates a #${id} post`);
+    const newPost = new Post();
+    newPost.id = id;
+    return await Object.assign(newPost, post).save();
+  }
+
   deletePost(id: number) {
     return Post.createQueryBuilder('post')
       .delete()
