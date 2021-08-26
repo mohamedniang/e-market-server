@@ -15,18 +15,30 @@ export class VideoCallGateway
   implements OnGatewayConnection, OnGatewayDisconnect
 {
   private server;
-  private infos: any[] = [];
+  private infos = [];
   private allClients: any[] = [];
+
+  clearRoom() {
+    for (const room of this.infos) {
+      if (room.users.length == 0)
+        this.infos.splice(this.infos.indexOf(room), 1);
+    }
+  }
+
   afterInit(server: Server) {
     this.server = server;
   }
+
   handleConnection(client) {
     Logger.log(client.id, 'client connected');
     this.allClients.push(client);
+    this.clearRoom();
   }
+
   handleDisconnect(client) {
     Logger.log(client.id, 'client disconnected');
     this.allClients.splice(this.allClients.indexOf(client), 1);
+    this.clearRoom();
 
     this.infos.forEach((room) => {
       if (room.users.length >= 1) {
@@ -45,6 +57,7 @@ export class VideoCallGateway
   login(client, params) {
     console.log(`server`, params);
     Logger.log(client.id, 'client joined');
+    this.clearRoom();
     const existingRoom = this.infos.find(
       (inf) => inf && inf.roomId === params[0],
     );
@@ -80,6 +93,7 @@ export class VideoCallGateway
     Logger.log(client.id + ':' + params, 'client disconnected');
     client.join(params[0]);
     client.to(params[0]).emit('user-disconnected', params[1]);
+    this.clearRoom();
 
     const room = this.infos.find((inf) => inf && inf.roomId === params[0]);
     if (room) {
