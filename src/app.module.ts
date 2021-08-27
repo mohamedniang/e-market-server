@@ -4,7 +4,7 @@ import {
   NestModule,
   RequestMethod,
 } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -25,36 +25,53 @@ import { VerificationLinkModule } from './verification-link/verification-link.mo
 import { RecoveryLinkModule } from './recovery-link/recovery-link.module';
 import { EmailModule } from './email/email.module';
 import { VideoCallModule } from './video-call/video-call.module';
-let config = {};
-if (process.env.NODE_ENV == 'production') {
-  config = {
-    type: process.env.TYPE,
-    host: process.env.HOST,
-    port: process.env.PORT,
-    username: process.env.USERNAME,
-    password: process.env.PASSWORD,
-    database: process.env.DATABASE,
-  };
-} else {
-  config = {
-    type: 'mysql',
-    host: 'localhost',
-    port: '3306',
-    username: 'root',
-    password: '',
-    database: 'market',
-  };
-}
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      ...config,
-      synchronize: true,
-      logging: false,
-      // autoLoadEntities: true,
-      entities: [__dirname + '/**/*.entity{.ts,.js}'],
-      migrations: [__dirname + '/**/*.migrations{.ts,.js}'],
-      subscribers: [__dirname + '/**/*.subscriber{.ts,.js}'],
+    // TypeOrmModule.forRoot({
+    //   ...config,
+    //   synchronize: true,
+    //   logging: false,
+    //   // autoLoadEntities: true,
+    //   entities: [__dirname + '/**/*.entity{.ts,.js}'],
+    //   migrations: [__dirname + '/**/*.migrations{.ts,.js}'],
+    //   subscribers: [__dirname + '/**/*.subscriber{.ts,.js}'],
+    // }),
+
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: async (conf: ConfigService) => ({
+        type: 'mysql',
+        host:
+          conf.get('NODE_ENV') == 'production'
+            ? conf.get('HOST_PROD')
+            : conf.get('HOST_DEV'),
+        port:
+          conf.get('NODE_ENV') == 'production'
+            ? conf.get('PORT_PROD')
+            : conf.get('PORT_DEV'),
+        username:
+          conf.get('NODE_ENV') == 'production'
+            ? conf.get('USERNAME_PROD')
+            : conf.get('USERNAME_DEV'),
+        password:
+          conf.get('NODE_ENV') == 'production'
+            ? conf.get('PASSWORD_PROD')
+            : conf.get('PASSWORD_DEV'),
+        database:
+          conf.get('NODE_ENV') == 'production'
+            ? conf.get('DATABASE_PROD')
+            : conf.get('DATABASE_DEV'),
+        extra: {
+          charset: 'utf8mb4_unicode_ci',
+        },
+        synchronize: true,
+        logging: false,
+        // autoLoadEntities: true,
+        entities: [__dirname + '/**/*.entity{.ts,.js}'],
+        migrations: [__dirname + '/**/*.migrations{.ts,.js}'],
+        subscribers: [__dirname + '/**/*.subscriber{.ts,.js}'],
+      }),
+      inject: [ConfigService],
     }),
     ConfigModule.forRoot({
       isGlobal: true,

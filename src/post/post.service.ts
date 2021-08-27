@@ -10,6 +10,7 @@ export class PostService {
   async getAllPost() {
     return Post.createQueryBuilder('post')
       .leftJoinAndSelect('post.owner', 'owner')
+      .orderBy('post.created_at', 'DESC')
       .getMany();
   }
 

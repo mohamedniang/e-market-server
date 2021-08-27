@@ -47,31 +47,31 @@ export class User extends BaseEntity {
   @Column({ default: false, select: false })
   isVerified: boolean;
 
-  @Column()
+  @Column({ default: '' })
   fullname: string;
 
-  @Column()
+  @Column({ default: '' })
   company: string;
 
-  @Column()
+  @Column({ default: '' })
   address: string;
 
-  @Column()
+  @Column({ default: '' })
   country: string;
 
-  @Column()
+  @Column({ default: '' })
   city: string;
 
-  @Column()
+  @Column({ default: '' })
   state: string;
 
-  @Column()
+  @Column({ default: '' })
   phone: string;
 
-  @Column()
+  @Column({ default: '' })
   fax: string;
 
-  @Column()
+  @Column({ default: '' })
   website: string;
 
   @BeforeInsert()
