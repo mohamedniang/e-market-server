@@ -1,5 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { JwtPayload } from 'jsonwebtoken';
+import { Role } from 'src/role/role.entity';
 import { User } from './user.entity';
 
 @Injectable()
@@ -12,16 +13,35 @@ export class UserService {
     if (userInDb) {
       throw new HttpException('User already exists', HttpStatus.BAD_REQUEST);
     }
+    user.role = new Role();
+    user.role.id = 2;
     return user.save();
   }
 
   findAll() {
-    return `This action returns all user`;
+    return User.find({
+      relations: ['role'],
+      select: [
+        'username',
+        'email',
+        'role',
+        'fullname',
+        'company',
+        'address',
+        'country',
+        'city',
+        'state',
+        'phone',
+        'fax',
+        'website',
+        'created_at',
+      ],
+    });
   }
 
   async findOne(id: string) {
     console.log(`finding by #${id} user`);
-    return await User.findOne({ where: { id } });
+    return await User.findOne({ where: { id }, relations: ['role'] });
   }
   async findOneMore(id: string) {
     return await User.findOne({
@@ -48,7 +68,8 @@ export class UserService {
     try {
       const res = await User.findOneOrFail({
         where: { email },
-        select: ['id', 'username', 'email', 'password', 'isVerified'],
+        select: ['id', 'username', 'email', 'password', 'isVerified', 'role'],
+        relations: ['role'],
       });
       return res;
     } catch (e) {
@@ -60,7 +81,8 @@ export class UserService {
     console.log(`finding by payload ${username}`);
     return User.findOneOrFail({
       where: { username },
-      select: ['id', 'username', 'email', 'password'],
+      select: ['id', 'username', 'email', 'password', 'role'],
+      relations: ['role'],
     });
   }
 

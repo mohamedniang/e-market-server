@@ -25,6 +25,7 @@ import { VerificationLinkModule } from './verification-link/verification-link.mo
 import { RecoveryLinkModule } from './recovery-link/recovery-link.module';
 import { EmailModule } from './email/email.module';
 import { VideoCallModule } from './video-call/video-call.module';
+import { RoleModule } from './role/role.module';
 @Module({
   imports: [
     // TypeOrmModule.forRoot({
@@ -89,6 +90,7 @@ import { VideoCallModule } from './video-call/video-call.module';
     RecoveryLinkModule,
     EmailModule,
     VideoCallModule,
+    RoleModule,
   ],
   controllers: [AppController, PostController],
   providers: [AppService, PostService, StoredElementService],

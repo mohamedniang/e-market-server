@@ -1,5 +1,6 @@
 import { Link } from 'src/link/link.entity';
 import { Post } from 'src/post/post.entity';
+import { Role } from 'src/role/role.entity';
 import {
   BaseEntity,
   BeforeInsert,
@@ -7,6 +8,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -31,6 +33,9 @@ export class User extends BaseEntity {
     select: false,
   })
   password: string;
+
+  @ManyToOne((type) => Role, (role) => role.users)
+  role: Role;
 
   @Column({
     type: 'varchar',

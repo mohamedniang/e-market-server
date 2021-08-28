@@ -21,8 +21,9 @@ export class PostController {
 
   @Get()
   // @UseGuards(AuthGuard())
-  async getPost(): Promise<Post[]> {
+  async getPost(@Req() req): Promise<Post[]> {
     Logger.log('inside post.controller', 'Post');
+    console.log(req.user);
     return await this.postService.getAllPost();
   }
 

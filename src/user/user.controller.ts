@@ -7,9 +7,13 @@ import {
   Param,
   Delete,
   Req,
+  UseGuards,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { User } from './user.entity';
+import { Role } from 'src/role/role.decorator';
+import { RoleGuard } from 'src/role/role.guard';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('user')
 export class UserController {
@@ -23,6 +27,8 @@ export class UserController {
   }
 
   @Get()
+  @UseGuards(AuthGuard('jwt'), RoleGuard) // use both guard in the function instead of the class to get req.user and added 'jwt' for challenge bug in authGuard
+  @Role('admin')
   findAll() {
     return this.userService.findAll();
   }

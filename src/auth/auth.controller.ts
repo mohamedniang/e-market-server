@@ -26,7 +26,7 @@ export class AuthController {
   @UseGuards(AuthGuard())
   // @Roles('User')
   async get(@Req() req) {
-    console.log(`req.body`, req.user);
+    console.log(`auth user`, req.user);
     return await this.userService.findOne(req.user?.id);
   }
 
