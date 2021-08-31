@@ -26,6 +26,8 @@ import { RecoveryLinkModule } from './recovery-link/recovery-link.module';
 import { EmailModule } from './email/email.module';
 import { VideoCallModule } from './video-call/video-call.module';
 import { RoleModule } from './role/role.module';
+import { SmsService } from './sms/sms.service';
+import { SmsModule } from './sms/sms.module';
 @Module({
   imports: [
     // TypeOrmModule.forRoot({
@@ -91,9 +93,10 @@ import { RoleModule } from './role/role.module';
     EmailModule,
     VideoCallModule,
     RoleModule,
+    SmsModule,
   ],
   controllers: [AppController, PostController],
-  providers: [AppService, PostService, StoredElementService],
+  providers: [AppService, PostService, StoredElementService, SmsService],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

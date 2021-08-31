@@ -55,7 +55,7 @@ export class AuthController {
       response.cookie('jwt', res.accessToken, {
         path: '/',
         httpOnly: true,
-        maxAge: this.authService.tokenLifeSpan,
+        maxAge: 24 * 60 * 60 * 1000,
       });
       // response.setHeader('Access-Control-Allow-Credentials', 'true');
       // console.log(response);

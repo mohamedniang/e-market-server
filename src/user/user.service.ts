@@ -18,13 +18,15 @@ export class UserService {
     return user.save();
   }
 
-  findAll() {
-    return User.find({
+  async findAll() {
+    return await User.find({
       relations: ['role'],
       select: [
+        'id',
         'username',
         'email',
         'role',
+        'password',
         'fullname',
         'company',
         'address',
@@ -34,7 +36,9 @@ export class UserService {
         'phone',
         'fax',
         'website',
+        'isVerified',
         'created_at',
+        'updated_at',
       ],
     });
   }

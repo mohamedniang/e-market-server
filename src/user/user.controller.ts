@@ -37,6 +37,7 @@ export class UserController {
   findOne(@Param('id') id: string) {
     return this.userService.findOne(id);
   }
+
   @Get('page/:id')
   findOneMore(@Param('id') id: string) {
     return this.userService.findOneMore(id);

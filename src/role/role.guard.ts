@@ -6,9 +6,16 @@ import { Reflector } from '@nestjs/core';
 export class RoleGuard implements CanActivate {
   constructor(private readonly reflector: Reflector) {}
 
-  async isUser(context: ExecutionContext) {
+  async isMember(context: ExecutionContext) {
     const request = context.switchToHttp().getRequest();
+    console.log('inside isMember()', request.user);
     return request.user;
+  }
+
+  async isMemberVIP(context: ExecutionContext) {
+    const request = context.switchToHttp().getRequest();
+    console.log('inside isMemberVIP()', request.user);
+    return request.user && request.user.role && request.user.role.id === 3;
   }
 
   async isAdmin(context: ExecutionContext) {
@@ -23,6 +30,14 @@ export class RoleGuard implements CanActivate {
     if (!role) return true;
     if (role == 'admin') {
       const r = await this.isAdmin(context);
+      if (r) return true;
+    }
+    if (role == 'member') {
+      const r = await this.isMember(context);
+      if (r) return true;
+    }
+    if (role == 'vip') {
+      const r = await this.isMemberVIP(context);
       if (r) return true;
     }
     return false;

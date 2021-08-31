@@ -38,6 +38,9 @@ export class Post extends BaseEntity {
   @JoinColumn()
   thumbnail: StoredElement;
 
+  @Column({ default: false })
+  isDeleted: boolean;
+
   @CreateDateColumn()
   created_at: Date;
 

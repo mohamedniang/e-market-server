@@ -79,6 +79,9 @@ export class User extends BaseEntity {
   @Column({ default: '' })
   website: string;
 
+  @Column({ default: 5 })
+  available_sms: number;
+
   @BeforeInsert()
   async hashPassword() {
     this.password = await bcrypt.hash(this.password, 10);

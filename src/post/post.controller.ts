@@ -12,6 +12,8 @@ import {
   Patch,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import { Role } from 'src/role/role.decorator';
+import { RoleGuard } from 'src/role/role.guard';
 import { Post } from './post.entity';
 import { PostService } from './post.service';
 
@@ -25,6 +27,13 @@ export class PostController {
     Logger.log('inside post.controller', 'Post');
     console.log(req.user);
     return await this.postService.getAllPost();
+  }
+
+  @Get('admin')
+  @UseGuards(AuthGuard(), RoleGuard)
+  @Role('admin')
+  async getAllPost(): Promise<Post[]> {
+    return await this.postService.getAllPostAdmin();
   }
 
   @Get(':id')

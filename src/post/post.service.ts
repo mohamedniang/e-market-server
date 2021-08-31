@@ -10,6 +10,14 @@ export class PostService {
   async getAllPost() {
     return Post.createQueryBuilder('post')
       .leftJoinAndSelect('post.owner', 'owner')
+      .where({ isDeleted: false })
+      .orderBy('post.created_at', 'DESC')
+      .getMany();
+  }
+
+  async getAllPostAdmin() {
+    return Post.createQueryBuilder('post')
+      .leftJoinAndSelect('post.owner', 'owner')
       .orderBy('post.created_at', 'DESC')
       .getMany();
   }
@@ -33,10 +41,13 @@ export class PostService {
     return await Object.assign(newPost, post).save();
   }
 
-  deletePost(id: number) {
-    return Post.createQueryBuilder('post')
-      .delete()
-      .where('id = :id', { id })
-      .execute();
+  async deletePost(id: number) {
+    const post = await Post.findOneOrFail({ where: { id } });
+    post.isDeleted = true;
+    return post.save();
+    // return Post.createQueryBuilder('post')
+    //   .delete()
+    //   .where('id = :id', { id })
+    //   .execute();
   }
 }
