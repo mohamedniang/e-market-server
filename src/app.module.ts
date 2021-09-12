@@ -5,6 +5,7 @@ import {
   RequestMethod,
 } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ScheduleModule } from '@nestjs/schedule';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -28,6 +29,7 @@ import { VideoCallModule } from './video-call/video-call.module';
 import { RoleModule } from './role/role.module';
 import { SmsService } from './sms/sms.service';
 import { SmsModule } from './sms/sms.module';
+import { TasksModule } from './tasks/tasks.module';
 @Module({
   imports: [
     // TypeOrmModule.forRoot({
@@ -82,6 +84,7 @@ import { SmsModule } from './sms/sms.module';
     MulterModule.register({
       dest: './files',
     }),
+    ScheduleModule.forRoot(),
     PostModule,
     UserModule,
     AuthModule,
@@ -94,6 +97,7 @@ import { SmsModule } from './sms/sms.module';
     VideoCallModule,
     RoleModule,
     SmsModule,
+    TasksModule,
   ],
   controllers: [AppController, PostController],
   providers: [AppService, PostService, StoredElementService, SmsService],

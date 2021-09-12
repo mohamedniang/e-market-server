@@ -27,7 +27,7 @@ export class SmsController {
     if (sender.available_sms == 0)
       return {
         error: 1,
-        message: 'You cannot more sms for today, wait until tomorrow',
+        message: 'You cannot send more sms for today, wait until tomorrow',
       };
     return await this.smsService.send(receiver.phone, body);
   }
