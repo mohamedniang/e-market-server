@@ -41,6 +41,9 @@ export class Post extends BaseEntity {
   @Column({ default: false })
   isDeleted: boolean;
 
+  @Column({ default: true })
+  type: boolean;
+
   @CreateDateColumn()
   created_at: Date;
 
