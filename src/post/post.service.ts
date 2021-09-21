@@ -23,7 +23,10 @@ export class PostService {
   }
 
   async getAllUserPost(id: string) {
-    return Post.find({ where: { owner: { id } }, relations: ['owner'] });
+    return Post.find({
+      where: { owner: { id }, isDeleted: false },
+      relations: ['owner'],
+    });
   }
 
   async getOnePost(id: string) {
