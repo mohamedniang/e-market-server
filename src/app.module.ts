@@ -30,6 +30,7 @@ import { RoleModule } from './role/role.module';
 import { SmsService } from './sms/sms.service';
 import { SmsModule } from './sms/sms.module';
 import { TasksModule } from './tasks/tasks.module';
+import { ApplicationModule } from './application/application.module';
 @Module({
   imports: [
     // TypeOrmModule.forRoot({
@@ -98,6 +99,7 @@ import { TasksModule } from './tasks/tasks.module';
     RoleModule,
     SmsModule,
     TasksModule,
+    ApplicationModule,
   ],
   controllers: [AppController, PostController],
   providers: [AppService, PostService, StoredElementService, SmsService],

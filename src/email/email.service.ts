@@ -18,10 +18,19 @@ export class EmailService {
     });
     this.transporter = nodemailer.createTransport({
       // SES: { ses, aws },
-      service: 'gmail',
+
+      // service: 'gmail',
+      // auth: {
+      //   user: 'mouhamedniang1997@gmail.com',
+      //   pass: 'neguasapurqlaxej',
+      // },
+
+      host: 'smtp.verifieddealers.com',
+      port: 465,
+      secure: true,
       auth: {
-        user: 'mouhamedniang1997@gmail.com',
-        pass: 'neguasapurqlaxej',
+        user: 'support@verifieddealers.com',
+        pass: 'Th1sIsPa55word',
       },
     });
   }

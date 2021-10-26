@@ -14,15 +14,24 @@ import { VerificationLink } from '../verification-link/verification-link.entity'
 import { v4 } from 'uuid';
 import { UserService } from '../user/user.service';
 import { RecoveryLink } from 'src/recovery-link/recovery-link.entity';
+import { ConfigService } from '@nestjs/config';
 
 @Controller('email')
 // @UseGuards(AuthGuard())
 export class EmailController {
-  test_email = 'mouhamedniang1997@gmail.com';
   constructor(
     private emailService: EmailService,
     private userService: UserService,
-  ) {}
+    private configService: ConfigService,
+  ) {
+    this.verificationUrl =
+      this.configService.get('NODE_ENV') == 'development'
+        ? this.configService.get('DEV_PLATFORM_SERVER_URL')
+        : this.configService.get('PROD_PLATFORM_SERVER_URL');
+  }
+
+  test_email = 'mouhamedniang1997@gmail.com';
+  private verificationUrl: string;
 
   @Get(':id')
   async get(@Param('id', new ParseIntPipe()) id: number) {
@@ -58,7 +67,7 @@ export class EmailController {
       to: link.account.email, // list of receivers
       subject: 'You have successfully registered to iphone flipping !', // Subject line
       text: 'click this verification link: verify my account', // plain text body
-      html: `<p>click this verification link: <a href="local.iphoneflipping.com/account/verification/${link.key}">verify my account</a></p>`, // html body
+      html: `<p>click this verification link: <a href="${this.verificationUrl}/account/verification/${link.key}">verify my account</a></p>`, // html body
     });
     link.resend_date = new Date(new Date().getTime() + 30 * 60 * 1000); // push the resend_date to 30min
     link.save();
@@ -101,7 +110,7 @@ export class EmailController {
               to: this.test_email, // list of receivers
               subject: 'You have successfully registered to iphone flipping !', // Subject line
               text: 'click this verification link: verify my account', // plain text body
-              html: `<p>click this verification link: <a href="local.iphoneflipping.com/account/verification/${existingLink.key}">verify my account</a></p>`, // html body
+              html: `<p>click this verification link: <a href="${this.verificationUrl}/account/verification/${existingLink.key}">verify my account</a></p>`, // html body
             });
           }
         } else if (existingLink.account.isVerified) {
@@ -126,7 +135,7 @@ export class EmailController {
         to: email, // list of receivers
         subject: 'You have successfully registered to iphone flipping !', // Subject line
         text: 'click this verification link: verify my account', // plain text body
-        html: `<p>click this verification link: <a href="local.iphoneflipping.com/account/verification/${link.key}">verify my account</a></p>`, // html body
+        html: `<p>click this verification link: <a href="${this.verificationUrl}/account/verification/${link.key}">verify my account</a></p>`, // html body
       });
       // link.resend_date = new Date(new Date().getTime() + 30 * 60 * 1000); // push the resend_date to 30min
       return result;
@@ -176,7 +185,7 @@ export class EmailController {
         to: email, // list of receivers
         subject: 'You requesting a password recovery to iphone flipping !', // Subject line
         text: 'click this link: change my password', // plain text body
-        html: `<p>click this link: <a href="local.iphoneflipping.com/account/password/change/${link.key}">change my password</a></p>`, // html body
+        html: `<p>click this link: <a href="${this.verificationUrl}/account/password/change/${link.key}">change my password</a></p>`, // html body
       });
       // link.resend_date = new Date(new Date().getTime() + 30 * 60 * 1000); // push the resend_date to 30min
       return result;
