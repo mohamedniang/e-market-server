@@ -30,7 +30,10 @@ export class PostService {
   }
 
   async getOnePost(id: string) {
-    return Post.findOne({ where: { id }, relations: ['owner', 'thumbnail'] });
+    return Post.findOne({
+      where: { id, isDeleted: false },
+      relations: ['owner', 'thumbnail'],
+    });
   }
 
   addPost(post: Post) {

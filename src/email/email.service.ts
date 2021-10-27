@@ -4,18 +4,18 @@ import * as nodemailer from 'nodemailer';
 import * as h2p from 'html2plaintext';
 import axios from 'axios';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const aws = require('aws-sdk');
+// const aws = require('aws-sdk');
 
 @Injectable()
 export class EmailService {
   transporter: any;
   returnedData: any;
   constructor() {
-    const ses = new aws.SES({
-      accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-      secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-      region: process.env.AWS_REGION,
-    });
+    // const ses = new aws.SES({
+    //   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    //   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+    //   region: process.env.AWS_REGION,
+    // });
     this.transporter = nodemailer.createTransport({
       // SES: { ses, aws },
 
@@ -25,12 +25,12 @@ export class EmailService {
       //   pass: 'neguasapurqlaxej',
       // },
 
-      host: 'smtp.verifieddealers.com',
-      port: 465,
+      host: process.env.SMTP_VD_HOST,
+      port: process.env.SMTP_VD_PORT,
       secure: true,
       auth: {
-        user: 'support@verifieddealers.com',
-        pass: 'Th1sIsPa55word',
+        user: process.env.SMTP_VD_USER,
+        pass: process.env.SMTP_VD_PASSWORD,
       },
     });
   }
