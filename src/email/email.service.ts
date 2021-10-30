@@ -74,11 +74,11 @@ export class EmailService {
               <h3>The details are:</h3>
               <table border="0">
                 <tbody>
-                  <tr><td>email</td><td>${contact.email}</td></tr>
-                  <tr><td>firstname</td><td>${contact.firstname}</td></tr>
-                  <tr><td>lastname</td><td>${contact.lastname}</td></tr>
-                  <tr><td>city</td><td>${contact.phone}</td></tr>
-                  <tr><td>country</td><td>${contact.message}</td></tr>
+                  <tr><td>Email</td><td>${contact.email}</td></tr>
+                  <tr><td>Firstname</td><td>${contact.firstname}</td></tr>
+                  <tr><td>Lastname</td><td>${contact.lastname}</td></tr>
+                  <tr><td>Phone</td><td>${contact.phone}</td></tr>
+                  <tr><td>Message</td><td>${contact.message}</td></tr>
                 </tbody>
               </table>
               `, // html body
