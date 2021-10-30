@@ -3,6 +3,9 @@ import { JwtPayload } from 'jsonwebtoken';
 import { Role } from 'src/role/role.entity';
 import { User } from './user.entity';
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const bcrypt = require('bcrypt');
+
 @Injectable()
 export class UserService {
   async create(user: User) {
@@ -91,9 +94,11 @@ export class UserService {
   }
 
   async update(id: string, user: any) {
-    console.log(`This action updates a #${id} user`);
+    console.log(`This action updates a #${id} user`, user);
     const newUser = new User();
     newUser.id = id;
+    if (user && user.password)
+      user.password = await bcrypt.hash(user.password, 10);
     return await Object.assign(newUser, user).save();
   }
 
