@@ -3,7 +3,6 @@ import * as nodemailer from 'nodemailer';
 // import * as ses from 'nodemailer-ses-transport';
 import * as h2p from 'html2plaintext';
 import axios from 'axios';
-import { ConfigService } from '@nestjs/config';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 // const aws = require('aws-sdk');
 
@@ -11,8 +10,7 @@ import { ConfigService } from '@nestjs/config';
 export class EmailService {
   transporter: any;
   returnedData: any;
-
-  constructor(private conf: ConfigService) {
+  constructor() {
     // const ses = new aws.SES({
     //   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
     //   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
@@ -58,31 +56,5 @@ export class EmailService {
       console.log(`error`, e);
       return { error: 1, message: e };
     }
-  }
-
-  async sendContactMessage(contact) {
-    const platformUrl =
-      this.conf.get('NODE_ENV') == 'development'
-        ? this.conf.get('DEV_PLATFORM_SERVER_URL')
-        : this.conf.get('PROD_PLATFORM_SERVER_URL');
-    const email = {
-      from: 'support@verifieddealers.com', // sender address
-      to: ['abe@dawser.com', 'mouhamedniang1997@gmail.com'], // list of receivers
-      subject: 'New Contact Form', // Subject line
-      text: ``, // plain text body
-      html: `
-              <h3>The details are:</h3>
-              <table border="0">
-                <tbody>
-                  <tr><td>email</td><td>${contact.email}</td></tr>
-                  <tr><td>firstname</td><td>${contact.firstname}</td></tr>
-                  <tr><td>lastname</td><td>${contact.lastname}</td></tr>
-                  <tr><td>city</td><td>${contact.phone}</td></tr>
-                  <tr><td>country</td><td>${contact.message}</td></tr>
-                </tbody>
-              </table>
-              `, // html body
-    };
-    return await this.send(email);
   }
 }

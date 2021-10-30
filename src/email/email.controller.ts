@@ -15,6 +15,7 @@ import { v4 } from 'uuid';
 import { UserService } from '../user/user.service';
 import { RecoveryLink } from 'src/recovery-link/recovery-link.entity';
 import { ConfigService } from '@nestjs/config';
+import { Contact } from 'src/contact/contact.entity';
 
 @Controller('email')
 // @UseGuards(AuthGuard())
@@ -46,6 +47,13 @@ export class EmailController {
     return result;
   }
 
+  @Post('send/contact')
+  async sendContactRequest(@Body() contact: any) {
+    console.log('sending contact form', contact);
+    Object.assign(new Contact(), contact).save();
+    return await this.emailService.sendContactMessage(contact);
+  }
+
   @Post('send/verification/:id')
   async sendVerification(@Param('id') id: string) {
     const now = new Date();
@@ -65,7 +73,7 @@ export class EmailController {
     const result = await this.emailService.send({
       from: this.test_email, // sender address
       to: link.account.email, // list of receivers
-      subject: 'You have successfully registered to iphone flipping !', // Subject line
+      subject: 'You have successfully registered to verified dealers !', // Subject line
       text: 'click this verification link: verify my account', // plain text body
       html: `<p>click this verification link: <a href="${this.verificationUrl}/account/verification/${link.key}">verify my account</a></p>`, // html body
     });
@@ -108,7 +116,7 @@ export class EmailController {
             return await this.emailService.send({
               from: this.test_email, // sender address
               to: this.test_email, // list of receivers
-              subject: 'You have successfully registered to iphone flipping !', // Subject line
+              subject: 'You have successfully registered to verified dealers !', // Subject line
               text: 'click this verification link: verify my account', // plain text body
               html: `<p>click this verification link: <a href="${this.verificationUrl}/account/verification/${existingLink.key}">verify my account</a></p>`, // html body
             });
@@ -133,7 +141,7 @@ export class EmailController {
       const result = await this.emailService.send({
         from: this.test_email, // sender address
         to: email, // list of receivers
-        subject: 'You have successfully registered to iphone flipping !', // Subject line
+        subject: 'You have successfully registered to verified dealers !', // Subject line
         text: 'click this verification link: verify my account', // plain text body
         html: `<p>click this verification link: <a href="${this.verificationUrl}/account/verification/${link.key}">verify my account</a></p>`, // html body
       });
@@ -183,7 +191,7 @@ export class EmailController {
       const result = await this.emailService.send({
         from: this.test_email, // sender address
         to: email, // list of receivers
-        subject: 'You requesting a password recovery to iphone flipping !', // Subject line
+        subject: 'You requesting a password recovery to ipverified dealers !', // Subject line
         text: 'click this link: change my password', // plain text body
         html: `<p>click this link: <a href="${this.verificationUrl}/account/password/change/${link.key}">change my password</a></p>`, // html body
       });
