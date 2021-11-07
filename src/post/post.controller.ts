@@ -10,16 +10,34 @@ import {
   ParseIntPipe,
   UseGuards,
   Patch,
+  UseInterceptors,
+  UploadedFile,
+  Res,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { Role } from 'src/role/role.decorator';
 import { RoleGuard } from 'src/role/role.guard';
 import { Post } from './post.entity';
 import { PostService } from './post.service';
+import { diskStorage } from 'multer';
+import { Observable, of } from 'rxjs';
+import { StoredElement } from 'src/stored-element/stored-element.entity';
+import { ConfigService } from '@nestjs/config';
+import { join } from 'path';
 
 @Controller('post')
 export class PostController {
-  constructor(private readonly postService: PostService) {}
+  constructor(
+    private configService: ConfigService,
+    private readonly postService: PostService,
+  ) {
+    this.serverUrl =
+      this.configService.get('NODE_ENV') == 'development'
+        ? this.configService.get('DEV_API_SERVER_URL')
+        : this.configService.get('PROD_API_SERVER_URL');
+  }
+  private serverUrl: string;
 
   @Get()
   // @UseGuards(AuthGuard())
@@ -65,6 +83,23 @@ export class PostController {
     console.log('body', post);
     post = Object.assign(new Post(), post);
     return await this.postService.addPost(post);
+  }
+
+  @httpPost('upload')
+  @UseInterceptors(FileInterceptor('file'))
+  async uploadFile(@UploadedFile() file: Express.Multer.File) {
+    console.log('PostController#uploadFile@file', file);
+    const element = new StoredElement();
+    element.name = file.originalname;
+    element.type = file.mimetype;
+    element.location = `${this.serverUrl}/post/image/${file.filename}`;
+    return await element.save();
+    // return of({ filename: file.filename });
+  }
+
+  @Get('image/:filename')
+  getPostImage(@Param('filename') filename, @Res() res) {
+    return res.sendFile(join(process.cwd(), `files/${filename}`));
   }
 
   @Patch(':id')

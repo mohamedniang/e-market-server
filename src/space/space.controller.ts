@@ -20,7 +20,7 @@ export class SpaceController {
   @UseInterceptors(FileInterceptor('file'))
   async upload(@UploadedFile() file, @Req() req) {
     try {
-      console.log(`file`, file);
+      console.log(`SpaceController#upload@file`, file);
       const element = new StoredElement();
       element.name = file.originalname;
       element.type = file.mimetype;

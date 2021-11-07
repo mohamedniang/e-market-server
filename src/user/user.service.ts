@@ -50,6 +50,7 @@ export class UserService {
     console.log(`finding by #${id} user`);
     return await User.findOne({ where: { id }, relations: ['role'] });
   }
+
   async findOneMore(id: string) {
     return await User.findOne({
       where: { id },
@@ -93,12 +94,38 @@ export class UserService {
     });
   }
 
+  async findUserPassword(id: any) {
+    console.log(`UserService#findUserPassword@id`, id);
+    return await User.findOneOrFail({
+      where: { id },
+      select: ['password'],
+    });
+  }
+
   async update(id: string, user: any) {
     console.log(`This action updates a #${id} user`, user);
     const newUser = new User();
     newUser.id = id;
-    if (user && user.password)
+
+    // THIS WILL BE USED ONLY WHEN THE USER IS UPDATING HIS PASSWORD
+    if (user && user.password) {
+      let isPasswordMatch: any;
+      if (user.oldpassword) {
+        isPasswordMatch = await bcrypt.compare(
+          user.oldpassword,
+          (
+            await this.findUserPassword(id)
+          ).password,
+        );
+      }
+      if (!isPasswordMatch)
+        throw new HttpException(
+          'Password change failed: Incorrect password',
+          HttpStatus.UNAUTHORIZED,
+        );
       user.password = await bcrypt.hash(user.password, 10);
+    }
+
     return await Object.assign(newUser, user).save();
   }
 

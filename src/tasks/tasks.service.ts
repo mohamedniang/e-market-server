@@ -6,9 +6,9 @@ import { User } from 'src/user/user.entity';
 export class TasksService {
   private readonly logger = new Logger(TasksService.name);
 
-  @Cron('0 0 * * * *')
+  @Cron('0 8 * * *')
   async handleCron() {
-    this.logger.debug('Its 00:00 time to reset available sms for all user');
+    this.logger.debug('Its 08:00 time to reset available sms for all user');
     await User.createQueryBuilder()
       .update()
       .set({ available_sms: 5 })
