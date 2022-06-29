@@ -115,7 +115,7 @@ export class EmailController {
             existingLink.save();
             return await this.emailService.send({
               from: this.test_email, // sender address
-              to: this.test_email, // list of receivers
+              to: email, // list of receivers
               subject: 'You have successfully registered to verified dealers !', // Subject line
               text: 'click this verification link: verify my account', // plain text body
               html: `<p>click this verification link: <a href="${this.verificationUrl}/account/verification/${existingLink.key}">verify my account</a></p>`, // html body
