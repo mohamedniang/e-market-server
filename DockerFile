@@ -15,6 +15,7 @@ ENV NODE_TLS_REJECT_UNAUTHORIZED=0
 
 RUN npm run build
 
+
 # Target image
 FROM node:14
 WORKDIR /app
