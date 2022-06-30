@@ -1,7 +1,7 @@
 # Build image
 FROM node:14 as builder
 
-RUN apk add --no-cache git python make gcc g++
+# RUN apk add --no-cache git python make gcc g++
 
 WORKDIR /app
 
