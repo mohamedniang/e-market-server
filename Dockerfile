@@ -1,8 +1,6 @@
 # Build image
 FROM node:14 as builder
 
-# RUN apk add --no-cache git python make gcc g++
-
 WORKDIR /app
 
 ADD package.json ./
@@ -14,7 +12,6 @@ ENV NODE_ENV=production
 ENV NODE_TLS_REJECT_UNAUTHORIZED=0
 
 RUN npm run build
-
 
 # Target image
 FROM node:14
